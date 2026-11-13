@@ -1,0 +1,14 @@
+<h1>Catálogo MercaPlast</h1>
+
+@if (error()) {
+  <p>{{ error() }}</p>
+}
+
+@for (p of productos(); track p.id) {
+  <div>
+    <h3>{{ p.nombre }}</h3>
+    <p>{{ p.presentacion }} - ${{ p.precio }}</p>
+  </div>
+} @empty {
+  <p>No hay productos todavía.</p>
+}
