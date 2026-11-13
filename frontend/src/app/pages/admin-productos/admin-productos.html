@@ -1,0 +1,65 @@
+<h2>Productos</h2>
+
+@if (error()) {
+  <p>{{ error() }}</p>
+}
+
+<div>
+  <input type="text" placeholder="Nombre" [(ngModel)]="form.nombre" />
+
+  <select [(ngModel)]="form.categoria_id">
+    <option [ngValue]="0" disabled>Selecciona categoría</option>
+    @for (c of categorias(); track c.id) {
+      <option [ngValue]="c.id">{{ c.nombre }}</option>
+    }
+  </select>
+
+  <input type="text" placeholder="Presentación (ej. 1 L)" [(ngModel)]="form.presentacion" />
+  <input type="number" placeholder="Precio" [(ngModel)]="form.precio" />
+  <input type="text" placeholder="Descripción" [(ngModel)]="form.descripcion" />
+  <input type="text" placeholder="Beneficios" [(ngModel)]="form.beneficios" />
+  <input type="text" placeholder="Usos" [(ngModel)]="form.usos" />
+  <input type="text" placeholder="Aromas" [(ngModel)]="form.aromas" />
+  <input type="text" placeholder="URL de la imagen" [(ngModel)]="form.imagen_url" />
+  <input type="text" placeholder="URL de la ficha técnica" [(ngModel)]="form.ficha_tecnica_url" />
+  <label>
+    <input type="checkbox" [(ngModel)]="form.activo" /> Activo
+  </label>
+
+  <button (click)="guardar()">{{ editandoId ? 'Actualizar' : 'Crear' }}</button>
+  @if (editandoId) {
+    <button (click)="cancelar()">Cancelar</button>
+  }
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Categoría</th>
+      <th>Presentación</th>
+      <th>Precio</th>
+      <th>Activo</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (p of productos(); track p.id) {
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.nombre }}</td>
+        <td>{{ nombreCategoria(p.categoria_id) }}</td>
+        <td>{{ p.presentacion }}</td>
+        <td>{{ p.precio }}</td>
+        <td>{{ p.activo ? 'Sí' : 'No' }}</td>
+        <td>
+          <button (click)="editar(p)">Editar</button>
+          <button (click)="eliminar(p)">Eliminar</button>
+        </td>
+      </tr>
+    } @empty {
+      <tr><td colspan="7">No hay productos todavía.</td></tr>
+    }
+  </tbody>
+</table>
