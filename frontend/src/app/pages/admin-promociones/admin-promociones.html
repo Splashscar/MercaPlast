@@ -1,0 +1,65 @@
+<h2>Promociones</h2>
+
+@if (error()) {
+  <p>{{ error() }}</p>
+}
+
+<div>
+  <select [(ngModel)]="form.producto_id">
+    <option [ngValue]="0" disabled>Selecciona producto</option>
+    @for (p of productos(); track p.id) {
+      <option [ngValue]="p.id">{{ p.nombre }} ({{ p.presentacion }})</option>
+    }
+  </select>
+
+  <input type="text" placeholder="Nombre de la promoción" [(ngModel)]="form.nombre" />
+  <input type="text" placeholder="Descripción" [(ngModel)]="form.descripcion" />
+  <input type="number" placeholder="Precio promocional" [(ngModel)]="form.precio_promocional" />
+  <input type="number" placeholder="Cantidad mínima" [(ngModel)]="form.cantidad_minima" />
+  <label>Inicio <input type="date" [(ngModel)]="form.fecha_inicio" /></label>
+  <label>Fin <input type="date" [(ngModel)]="form.fecha_fin" /></label>
+  <label>
+    <input type="checkbox" [(ngModel)]="form.activa" /> Activa
+  </label>
+
+  <button (click)="guardar()">{{ editandoId ? 'Actualizar' : 'Crear' }}</button>
+  @if (editandoId) {
+    <button (click)="cancelar()">Cancelar</button>
+  }
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Producto</th>
+      <th>Nombre</th>
+      <th>Precio promo</th>
+      <th>Cant. mín.</th>
+      <th>Inicio</th>
+      <th>Fin</th>
+      <th>Activa</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (p of promociones(); track p.id) {
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ nombreProducto(p.producto_id) }}</td>
+        <td>{{ p.nombre }}</td>
+        <td>{{ p.precio_promocional }}</td>
+        <td>{{ p.cantidad_minima }}</td>
+        <td>{{ p.fecha_inicio }}</td>
+        <td>{{ p.fecha_fin }}</td>
+        <td>{{ p.activa ? 'Sí' : 'No' }}</td>
+        <td>
+          <button (click)="editar(p)">Editar</button>
+          <button (click)="eliminar(p)">Eliminar</button>
+        </td>
+      </tr>
+    } @empty {
+      <tr><td colspan="9">No hay promociones todavía.</td></tr>
+    }
+  </tbody>
+</table>
