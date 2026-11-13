@@ -1,0 +1,9 @@
+<h1>Panel de administración</h1>
+
+<input type="text" placeholder="Usuario" [(ngModel)]="username" />
+<input type="password" placeholder="Contraseña" [(ngModel)]="password" />
+<button (click)="entrar()">Entrar</button>
+
+@if (error()) {
+  <p>{{ error() }}</p>
+}
