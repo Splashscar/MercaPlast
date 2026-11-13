@@ -2,7 +2,8 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from .excel_service import (
     obtener_registros,
     crear_registro,
@@ -11,7 +12,15 @@ from .excel_service import (
 )
 
 from .serializers import ProductSerializer, CategorySerializer, PromotionSerializer
-class ProductListCreateView(APIView):
+
+class SoloAdminEscribe:
+    authentication_classes = [TokenAuthentication]
+
+    def get_permissions(self):
+        if self.request.method == "GET":
+            return [AllowAny()]
+        return [IsAuthenticated()]
+class ProductListCreateView(SoloAdminEscribe, APIView):
 
     def get(self, request):
         productos = obtener_registros("Productos")
@@ -34,7 +43,7 @@ class ProductListCreateView(APIView):
         )
 
 
-class ProductDetailView(APIView):
+class ProductDetailView(SoloAdminEscribe, APIView):
 
     def put(self, request, producto_id):
         serializer = ProductSerializer(data=request.data)
@@ -70,7 +79,7 @@ class ProductDetailView(APIView):
             status=status.HTTP_404_NOT_FOUND
         )
 
-class CategoryListCreateView(APIView):
+class CategoryListCreateView(SoloAdminEscribe, APIView):
 
     def get(self, request):
         categorias = obtener_registros("Categorias")
@@ -93,7 +102,7 @@ class CategoryListCreateView(APIView):
         )
 
 
-class CategoryDetailView(APIView):
+class CategoryDetailView(SoloAdminEscribe, APIView):
 
     def put(self, request, categoria_id):
         serializer = CategorySerializer(data=request.data)
@@ -128,7 +137,7 @@ class CategoryDetailView(APIView):
             {"error": "Categoría no encontrada"},
             status=status.HTTP_404_NOT_FOUND
         )
-class PromotionListCreateView(APIView):
+class PromotionListCreateView(SoloAdminEscribe,APIView):
 
     def get(self, request):
         promociones = obtener_registros("Promociones")
@@ -151,7 +160,7 @@ class PromotionListCreateView(APIView):
         )
 
 
-class PromotionDetailView(APIView):
+class PromotionDetailView(SoloAdminEscribe, APIView):
 
     def put(self, request, promocion_id):
         serializer = PromotionSerializer(data=request.data)

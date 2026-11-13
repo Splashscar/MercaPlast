@@ -1,0 +1,45 @@
+<h2>Categorías</h2>
+
+@if (error()) {
+  <p>{{ error() }}</p>
+}
+
+<div>
+  <input type="text" placeholder="Nombre" [(ngModel)]="form.nombre" />
+  <input type="text" placeholder="Descripción" [(ngModel)]="form.descripcion" />
+  <label>
+    <input type="checkbox" [(ngModel)]="form.activa" /> Activa
+  </label>
+  <button (click)="guardar()">{{ editandoId ? 'Actualizar' : 'Crear' }}</button>
+  @if (editandoId) {
+    <button (click)="cancelar()">Cancelar</button>
+  }
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nombre</th>
+      <th>Descripción</th>
+      <th>Activa</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    @for (c of categorias(); track c.id) {
+      <tr>
+        <td>{{ c.id }}</td>
+        <td>{{ c.nombre }}</td>
+        <td>{{ c.descripcion }}</td>
+        <td>{{ c.activa ? 'Sí' : 'No' }}</td>
+        <td>
+          <button (click)="editar(c)">Editar</button>
+          <button (click)="eliminar(c)">Eliminar</button>
+        </td>
+      </tr>
+    } @empty {
+      <tr><td colspan="5">No hay categorías todavía.</td></tr>
+    }
+  </tbody>
+</table>
