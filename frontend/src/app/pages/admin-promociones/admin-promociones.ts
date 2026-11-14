@@ -14,15 +14,17 @@ export class AdminPromociones implements OnInit {
   promociones = signal<Promocion[]>([]);
   productos = signal<Producto[]>([]);
   error = signal('');
+  subiendo = signal(false);
 
   editandoId: number | null = null;
   form: Promocion = this.formVacio();
 
   formVacio(): Promocion {
     return {
-      producto_id: 0,
+      producto_id: null,
       nombre: '',
       descripcion: '',
+      imagen_url: '',
       precio_promocional: '',
       cantidad_minima: 1,
       fecha_inicio: '',
@@ -38,8 +40,14 @@ export class AdminPromociones implements OnInit {
     });
   }
 
-  nombreProducto(id: number) {
+  nombreProducto(id: number | null) {
+    if (id === null || id === undefined) return 'Varios productos';
     return this.productos().find((p) => p.id === id)?.nombre ?? '—';
+  }
+
+  imagenMostrada(p: Promocion) {
+    if (p.imagen_url) return p.imagen_url;
+    return this.productos().find((x) => x.id === p.producto_id)?.imagen_url ?? '';
   }
 
   cargar() {
@@ -49,12 +57,43 @@ export class AdminPromociones implements OnInit {
     });
   }
 
+  alElegirImagen(evento: Event) {
+    const input = evento.target as HTMLInputElement;
+    const archivo = input.files?.[0];
+    if (!archivo) return;
+
+    this.error.set('');
+    this.subiendo.set(true);
+
+    this.api.subirImagen(archivo).subscribe({
+      next: (resp) => {
+        this.form.imagen_url = resp.url;
+        this.subiendo.set(false);
+        input.value = '';
+      },
+      error: (e) => {
+        this.subiendo.set(false);
+        this.error.set('No se pudo subir la imagen: ' + (e.error?.error ?? 'revisa el archivo'));
+        input.value = '';
+      },
+    });
+  }
+
+  quitarImagen() {
+    this.form.imagen_url = '';
+  }
+
   guardar() {
     this.error.set('');
 
+    const datos: Promocion = {
+      ...this.form,
+      producto_id: this.form.producto_id ? this.form.producto_id : null,
+    };
+
     const peticion = this.editandoId
-      ? this.api.actualizarPromocion(this.editandoId, this.form)
-      : this.api.crearPromocion(this.form);
+      ? this.api.actualizarPromocion(this.editandoId, datos)
+      : this.api.crearPromocion(datos);
 
     peticion.subscribe({
       next: () => {
@@ -69,9 +108,10 @@ export class AdminPromociones implements OnInit {
   editar(p: Promocion) {
     this.editandoId = p.id ?? null;
     this.form = {
-      producto_id: p.producto_id,
+      producto_id: p.producto_id ?? null,
       nombre: p.nombre,
       descripcion: p.descripcion ?? '',
+      imagen_url: p.imagen_url ?? '',
       precio_promocional: p.precio_promocional,
       cantidad_minima: p.cantidad_minima,
       fecha_inicio: p.fecha_inicio,

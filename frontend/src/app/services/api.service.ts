@@ -26,7 +26,8 @@ export interface Categoria {
 
 export interface Promocion {
   id?: number;
-  producto_id: number;
+    producto_id: number | null;
+  imagen_url?: string;
   nombre: string;
   descripcion?: string;
   precio_promocional: string | number;
