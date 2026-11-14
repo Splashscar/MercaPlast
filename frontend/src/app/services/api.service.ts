@@ -26,7 +26,8 @@ export interface Categoria {
 
 export interface Promocion {
   id?: number;
-  producto_id: number;
+    producto_id: number | null;
+  imagen_url?: string;
   nombre: string;
   descripcion?: string;
   precio_promocional: string | number;
@@ -40,6 +41,12 @@ export interface Promocion {
 export class ApiService {
   private http = inject(HttpClient);
   private baseUrl = 'http://127.0.0.1:8000/api';
+
+    subirImagen(archivo: File): Observable<{ url: string }> {
+    const datos = new FormData();
+    datos.append('imagen', archivo);
+    return this.http.post<{ url: string }>(`${this.baseUrl}/upload-image/`, datos);
+  }
 
   // Productos
   getProductos(): Observable<Producto[]> {

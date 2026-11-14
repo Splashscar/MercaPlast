@@ -20,7 +20,20 @@
   <input type="text" placeholder="Beneficios" [(ngModel)]="form.beneficios" />
   <input type="text" placeholder="Usos" [(ngModel)]="form.usos" />
   <input type="text" placeholder="Aromas" [(ngModel)]="form.aromas" />
-  <input type="text" placeholder="URL de la imagen" [(ngModel)]="form.imagen_url" />
+
+  <div>
+    <label>
+      Imagen:
+      <input type="file" accept="image/png,image/jpeg,image/webp" (change)="alElegirImagen($event)" />
+    </label>
+    @if (subiendo()) {
+      <span>Subiendo...</span>
+    }
+    @if (form.imagen_url) {
+      <img [src]="form.imagen_url" alt="Vista previa" width="100" />
+    }
+  </div>
+
   <input type="text" placeholder="URL de la ficha técnica" [(ngModel)]="form.ficha_tecnica_url" />
   <label>
     <input type="checkbox" [(ngModel)]="form.activo" /> Activo
@@ -36,6 +49,7 @@
   <thead>
     <tr>
       <th>ID</th>
+      <th>Imagen</th>
       <th>Nombre</th>
       <th>Categoría</th>
       <th>Presentación</th>
@@ -48,6 +62,11 @@
     @for (p of productos(); track p.id) {
       <tr>
         <td>{{ p.id }}</td>
+        <td>
+          @if (p.imagen_url) {
+            <img [src]="p.imagen_url" alt="{{ p.nombre }}" width="50" />
+          }
+        </td>
         <td>{{ p.nombre }}</td>
         <td>{{ nombreCategoria(p.categoria_id) }}</td>
         <td>{{ p.presentacion }}</td>
@@ -59,7 +78,7 @@
         </td>
       </tr>
     } @empty {
-      <tr><td colspan="7">No hay productos todavía.</td></tr>
+      <tr><td colspan="8">No hay productos todavía.</td></tr>
     }
   </tbody>
 </table>

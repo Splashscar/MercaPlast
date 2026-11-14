@@ -30,9 +30,10 @@ class CategorySerializer(serializers.Serializer):
 
 class PromotionSerializer(serializers.Serializer):
     id = serializers.IntegerField(read_only=True)
-    producto_id = serializers.IntegerField()
+    producto_id = serializers.IntegerField(required=False, allow_null=True)
     nombre = serializers.CharField(max_length=255)
     descripcion = serializers.CharField(required=False, allow_blank=True)
+    imagen_url = serializers.URLField(required=False, allow_blank=True)
     precio_promocional = serializers.DecimalField(
         max_digits=12, decimal_places=2, min_value=Decimal("0.01")
     )
@@ -42,6 +43,9 @@ class PromotionSerializer(serializers.Serializer):
     activa = serializers.BooleanField(default=True)
 
     def validate_producto_id(self, value):
+        if value is None:
+            return None
+
         productos = obtener_registros("Productos")
         if not any(p.get("id") == value for p in productos):
             raise serializers.ValidationError(
@@ -55,17 +59,19 @@ class PromotionSerializer(serializers.Serializer):
                 {"fecha_fin": "La fecha fin no puede ser anterior a la fecha inicio."}
             )
 
-        productos = obtener_registros("Productos")
-        producto = next(
-            (p for p in productos if p.get("id") == datos["producto_id"]),
-            None,
-        )
-        if producto and producto.get("precio") is not None:
-            precio_normal = Decimal(str(producto["precio"]))
-            if datos["precio_promocional"] >= precio_normal:
-                raise serializers.ValidationError(
-                    {"precio_promocional": "Debe ser menor al precio normal del producto."}
-                )
+        producto_id = datos.get("producto_id")
+        if producto_id is not None:
+            productos = obtener_registros("Productos")
+            producto = next(
+                (p for p in productos if p.get("id") == producto_id),
+                None,
+            )
+            if producto and producto.get("precio") is not None:
+                precio_normal = Decimal(str(producto["precio"]))
+                if datos["precio_promocional"] >= precio_normal:
+                    raise serializers.ValidationError(
+                        {"precio_promocional": "Debe ser menor al precio normal del producto."}
+                    )
         return datos
 
     def to_representation(self, instance):

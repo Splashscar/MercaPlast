@@ -8,9 +8,11 @@ from .views import (
     PromotionListCreateView,
     PromotionDetailView,
 )
+from .upload_views import ImageUploadView
 
 urlpatterns = [
     path("auth/login/", obtain_auth_token, name="login"),
+    path("upload-image/", ImageUploadView.as_view(), name="upload-image"),
     path("products/", ProductListCreateView.as_view(), name="products"),
     path("products/<int:producto_id>/", ProductDetailView.as_view(), name="product-detail"),
     path("categories/", CategoryListCreateView.as_view(), name="categories"),

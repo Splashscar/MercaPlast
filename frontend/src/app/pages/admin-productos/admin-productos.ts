@@ -14,7 +14,7 @@ export class AdminProductos implements OnInit {
   productos = signal<Producto[]>([]);
   categorias = signal<Categoria[]>([]);
   error = signal('');
-
+  subiendo = signal(false);
   editandoId: number | null = null;
   form: Producto = this.formVacio();
 
@@ -94,7 +94,27 @@ export class AdminProductos implements OnInit {
       error: () => this.error.set('No se pudo eliminar'),
     });
   }
+    alElegirImagen(evento: Event) {
+    const input = evento.target as HTMLInputElement;
+    const archivo = input.files?.[0];
+    if (!archivo) return;
 
+    this.error.set('');
+    this.subiendo.set(true);
+
+    this.api.subirImagen(archivo).subscribe({
+      next: (resp) => {
+        this.form.imagen_url = resp.url;
+        this.subiendo.set(false);
+        input.value = '';
+      },
+      error: (e) => {
+        this.subiendo.set(false);
+        this.error.set('No se pudo subir la imagen: ' + (e.error?.error ?? 'revisa el archivo'));
+        input.value = '';
+      },
+    });
+  }
   cancelar() {
     this.editandoId = null;
     this.form = this.formVacio();

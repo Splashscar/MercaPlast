@@ -6,18 +6,33 @@
 
 <div>
   <select [(ngModel)]="form.producto_id">
-    <option [ngValue]="0" disabled>Selecciona producto</option>
+    <option [ngValue]="null">Varios productos / sin producto único</option>
     @for (p of productos(); track p.id) {
       <option [ngValue]="p.id">{{ p.nombre }} ({{ p.presentacion }})</option>
     }
   </select>
 
   <input type="text" placeholder="Nombre de la promoción" [(ngModel)]="form.nombre" />
-  <input type="text" placeholder="Descripción" [(ngModel)]="form.descripcion" />
+  <input type="text" placeholder="Descripción (ej. productos incluidos)" [(ngModel)]="form.descripcion" />
   <input type="number" placeholder="Precio promocional" [(ngModel)]="form.precio_promocional" />
   <input type="number" placeholder="Cantidad mínima" [(ngModel)]="form.cantidad_minima" />
   <label>Inicio <input type="date" [(ngModel)]="form.fecha_inicio" /></label>
   <label>Fin <input type="date" [(ngModel)]="form.fecha_fin" /></label>
+
+  <div>
+    <label>
+      Imagen:
+      <input type="file" accept="image/png,image/jpeg,image/webp" (change)="alElegirImagen($event)" />
+    </label>
+    @if (subiendo()) {
+      <span>Subiendo...</span>
+    }
+    @if (form.imagen_url) {
+      <img [src]="form.imagen_url" alt="Vista previa" width="100" />
+      <button type="button" (click)="quitarImagen()">Quitar imagen</button>
+    }
+  </div>
+
   <label>
     <input type="checkbox" [(ngModel)]="form.activa" /> Activa
   </label>
@@ -32,6 +47,7 @@
   <thead>
     <tr>
       <th>ID</th>
+      <th>Imagen</th>
       <th>Producto</th>
       <th>Nombre</th>
       <th>Precio promo</th>
@@ -46,6 +62,11 @@
     @for (p of promociones(); track p.id) {
       <tr>
         <td>{{ p.id }}</td>
+        <td>
+          @if (imagenMostrada(p)) {
+            <img [src]="imagenMostrada(p)" alt="{{ p.nombre }}" width="50" />
+          }
+        </td>
         <td>{{ nombreProducto(p.producto_id) }}</td>
         <td>{{ p.nombre }}</td>
         <td>{{ p.precio_promocional }}</td>
@@ -59,7 +80,7 @@
         </td>
       </tr>
     } @empty {
-      <tr><td colspan="9">No hay promociones todavía.</td></tr>
+      <tr><td colspan="10">No hay promociones todavía.</td></tr>
     }
   </tbody>
 </table>
