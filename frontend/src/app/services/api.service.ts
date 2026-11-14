@@ -41,6 +41,12 @@ export class ApiService {
   private http = inject(HttpClient);
   private baseUrl = 'http://127.0.0.1:8000/api';
 
+    subirImagen(archivo: File): Observable<{ url: string }> {
+    const datos = new FormData();
+    datos.append('imagen', archivo);
+    return this.http.post<{ url: string }>(`${this.baseUrl}/upload-image/`, datos);
+  }
+
   // Productos
   getProductos(): Observable<Producto[]> {
     return this.http.get<Producto[]>(`${this.baseUrl}/products/`);
