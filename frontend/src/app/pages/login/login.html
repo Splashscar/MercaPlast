@@ -1,9 +1,45 @@
-<h1>Panel de administración</h1>
+<main class="login-fondo">
+  <section class="login-tarjeta">
+    <div class="logo-caja">
+      <img src="logo.jpg" alt="Mercaplast" />
+    </div>
 
-<input type="text" placeholder="Usuario" [(ngModel)]="username" />
-<input type="password" placeholder="Contraseña" [(ngModel)]="password" />
-<button (click)="entrar()">Entrar</button>
+    <h1>Panel de administración</h1>
+    <p class="login-sub">Ingresa para gestionar el catálogo</p>
 
-@if (error()) {
-  <p>{{ error() }}</p>
-}
+    <form (ngSubmit)="entrar()">
+      <label for="usuario">Usuario</label>
+      <input
+        id="usuario"
+        name="usuario"
+        type="text"
+        autocomplete="username"
+        [(ngModel)]="username"
+      />
+
+      <label for="clave">Contraseña</label>
+      <div class="campo-clave">
+        <input
+          id="clave"
+          name="clave"
+          [type]="verClave() ? 'text' : 'password'"
+          autocomplete="current-password"
+          [(ngModel)]="password"
+        />
+        <button type="button" class="ojo" (click)="verClave.set(!verClave())">
+          {{ verClave() ? 'Ocultar' : 'Ver' }}
+        </button>
+      </div>
+
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+      }
+
+      <button type="submit" class="boton-entrar" [disabled]="cargando()">
+        {{ cargando() ? 'Entrando...' : 'Entrar' }}
+      </button>
+    </form>
+
+    <a class="volver" href="/">← Volver al catálogo</a>
+  </section>
+</main>

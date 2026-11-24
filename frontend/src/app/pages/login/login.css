@@ -1,0 +1,112 @@
+.login-fondo {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #F8FBFD 0%, #dcecfb 55%, #8fc1ee 100%);
+}
+
+.login-tarjeta {
+  width: 100%;
+  max-width: 400px;
+  background: #fff;
+  border-radius: 18px;
+  padding: 2rem 1.8rem;
+  box-shadow: 0 10px 30px rgba(9, 63, 149, 0.18);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.logo-caja {
+  flex-shrink: 0;
+}
+.logo-caja img {
+  display: block;
+  height: 60px;
+  width: auto;
+}
+
+h1 {
+  margin: 0.8rem 0 0.2rem;
+  font-size: 1.4rem;
+  color: var(--azul);
+  text-align: center;
+}
+.login-sub {
+  margin: 0 0 1.4rem;
+  color: #55657d;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+form { width: 100%; display: flex; flex-direction: column; }
+
+label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--azul);
+  margin-bottom: 0.3rem;
+}
+
+input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 0.9rem;
+  margin-bottom: 1rem;
+  border: 1.5px solid #cfdbe8;
+  border-radius: 10px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input:focus {
+  border-color: var(--petroleo);
+  box-shadow: 0 0 0 3px rgba(16, 94, 136, 0.15);
+}
+
+.campo-clave { position: relative; }
+.campo-clave input { padding-right: 4.5rem; }
+.ojo {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.35rem;
+  background: none;
+  border: none;
+  color: var(--petroleo);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+}
+
+.error {
+  margin: 0 0 1rem;
+  padding: 0.6rem 0.8rem;
+  background: #fdecec;
+  color: #b3261e;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.boton-entrar {
+  background: var(--verde);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 0.8rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.boton-entrar:hover:not(:disabled) { background: var(--verde-oscuro); }
+.boton-entrar:disabled { opacity: 0.7; cursor: not-allowed; }
+
+.volver {
+  margin-top: 1.2rem;
+  font-size: 0.85rem;
+  color: var(--petroleo);
+  text-decoration: none;
+}
+.volver:hover { text-decoration: underline; }

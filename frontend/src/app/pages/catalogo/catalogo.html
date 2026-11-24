@@ -1,14 +1,109 @@
-<h1>Catálogo MercaPlast</h1>
-
-@if (error()) {
-  <p>{{ error() }}</p>
-}
-
-@for (p of productos(); track p.id) {
-  <div>
-    <h3>{{ p.nombre }}</h3>
-    <p>{{ p.presentacion }} - ${{ p.precio }}</p>
+<header class="encabezado">
+  <div class="logo-caja">
+    <img src="logo.jpg" alt="Mercaplast, limpieza y bienestar en cada espacio" />
   </div>
-} @empty {
-  <p>No hay productos todavía.</p>
-}
+  <nav>
+    <a href="#inicio">Inicio</a>
+    <a href="#productos">Productos</a>
+    <a href="#nosotros">Nosotros</a>
+  
+  </nav>
+  <button class="boton-whatsapp">Pedidos por WhatsApp</button>
+</header>
+
+<section class="portada" id="inicio">
+  <div class="portada-texto">
+    <h1>Soluciones de limpieza <span>para cada necesidad</span></h1>
+    <p>Productos de alta calidad para el hogar, negocios e industria.</p>
+    <button class="boton-whatsapp grande">Realiza tu pedido</button>
+  </div>
+</section>
+
+<section class="beneficios">
+  @for (b of beneficios; track b.texto) {
+    <div class="beneficio">
+      <span class="icono">{{ b.icono }}</span>
+      <span>{{ b.texto }}</span>
+    </div>
+  }
+</section>
+
+<section class="productos" id="productos">
+  <h2>Nuestros Productos</h2>
+  <p class="subtitulo">Encuentra la solución perfecta para tu limpieza.</p>
+
+  @if (error()) {
+    <p class="aviso">{{ error() }}</p>
+  }
+
+  <div class="rejilla">
+    @for (p of productos(); track p.id) {
+      <article class="tarjeta">
+        <div class="tarjeta-imagen">
+          @if (p.imagen_url) {
+            <img [src]="p.imagen_url" [alt]="p.nombre" />
+          } @else {
+            <span class="sin-imagen">Sin imagen</span>
+          }
+        </div>
+        <h3>{{ p.nombre }}</h3>
+        <p class="presentacion">{{ p.presentacion }}</p>
+        <p class="precio">${{ precio(p.precio) }}</p>
+        <button class="boton-whatsapp pequeno">Pedir por WhatsApp</button>
+      </article>
+    } @empty {
+      <p class="aviso">Pronto tendremos productos disponibles.</p>
+    }
+  </div>
+</section>
+
+<section class="porque" id="nosotros">
+  <div class="porque-lista">
+    <h2>¿Por qué elegir <span>Mercaplast?</span></h2>
+    <ul>
+      <li>Fórmula concentrada de alto rendimiento</li>
+      <li>Suave con tus manos</li>
+      <li>No contiene soda cáustica</li>
+      <li>Excelente relación calidad-precio</li>
+    </ul>
+  </div>
+  <p class="eslogan">Menos esfuerzo,<br />mejores resultados</p>
+</section>
+
+<section class="envios-contacto" id="envios">
+  <div class="envios">
+    <h2>🚚 Envíos y Cobertura</h2>
+    <p>Domicilio gratis en Bogotá y alrededores.<br />Envíos a nivel nacional.</p>
+    <button class="boton-azul">Conoce más →</button>
+  </div>
+
+  <div class="contacto" id="contacto">
+    <h2>¿Listo para hacer tu pedido?</h2>
+    <p>Contáctanos directamente por WhatsApp</p>
+    <button class="boton-whatsapp grande">322 713 1630</button>
+  </div>
+</section>
+
+<footer class="pie">
+  <div class="pie-logo">
+    <div class="logo-caja">
+      <img src="logo.jpg" alt="Mercaplast" />
+    </div>
+  </div>
+
+  <div class="pie-bloque">
+    <h4>Medios de pago</h4>
+    <p>Nequi · Llave · Bancolombia</p>
+  </div>
+
+  <div class="pie-bloque">
+    <h4>Síguenos</h4>
+    <p>Facebook · Instagram · TikTok</p>
+  </div>
+
+  <div class="pie-bloque">
+    <p>🍃 Una empresa comprometida con el medio ambiente</p>
+  </div>
+
+  <p class="derechos">© 2026 Mercaplast. Todos los derechos reservados.</p>
+</footer>

@@ -13,10 +13,21 @@ export class Catalogo implements OnInit {
   productos = signal<Producto[]>([]);
   error = signal('');
 
+  beneficios = [
+    { icono: '🛡️', texto: 'Calidad garantizada' },
+    { icono: '🍃', texto: '100% Biodegradable' },
+    { icono: '🏭', texto: 'Fabricado en Colombia' },
+    { icono: '🚚', texto: 'Envíos a todo el país' },
+  ];
+
   ngOnInit() {
     this.api.getProductos().subscribe({
-      next: (datos) => this.productos.set(datos),
-      error: () => this.error.set('No se pudo conectar con el backend'),
+      next: (datos) => this.productos.set(datos.filter((p) => p.activo)),
+      error: () => this.error.set('No se pudo cargar el catálogo'),
     });
+  }
+
+  precio(valor: string | number) {
+    return Number(valor).toLocaleString('es-CO');
   }
 }
