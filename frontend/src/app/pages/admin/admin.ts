@@ -1,8 +1,10 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { AdminCategorias } from '../admin-categorias/admin-categorias';
 import { AdminProductos } from '../admin-productos/admin-productos';
 import { AdminPromociones } from '../admin-promociones/admin-promociones';
+
+type Seccion = 'categorias' | 'productos' | 'promociones';
 
 @Component({
   selector: 'app-admin',
@@ -12,4 +14,5 @@ import { AdminPromociones } from '../admin-promociones/admin-promociones';
 })
 export class Admin {
   auth = inject(AuthService);
+  seccion = signal<Seccion>('productos');
 }

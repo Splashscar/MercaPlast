@@ -16,12 +16,28 @@ export class Login {
   username = '';
   password = '';
   error = signal('');
+  cargando = signal(false);
+  verClave = signal(false);
 
   entrar() {
+    if (!this.username || !this.password) {
+      this.error.set('Escribe tu usuario y tu contraseña');
+      return;
+    }
+
     this.error.set('');
+    this.cargando.set(true);
+
     this.auth.login(this.username, this.password).subscribe({
       next: () => this.router.navigate(['/admin']),
-      error: () => this.error.set('Usuario o contraseña incorrectos'),
+      error: (e) => {
+        this.cargando.set(false);
+        this.error.set(
+          e.status === 0
+            ? 'No se pudo conectar con el servidor'
+            : 'Usuario o contraseña incorrectos'
+        );
+      },
     });
   }
 }

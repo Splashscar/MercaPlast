@@ -1,17 +1,5 @@
 /* Logo recortado: el archivo tiene mucho margen blanco */
-.logo-caja {
-  width: 140px;
-  height: 91px;
-  overflow: hidden;
-  position: relative;
-  flex-shrink: 0;
-}
-.logo-caja img {
-  position: absolute;
-  width: 157.5px;
-  left: -14.6px;
-  top: -31.4px;
-}
+
 
 .encabezado {
   display: flex;
@@ -168,4 +156,12 @@ nav a:hover { color: var(--verde); }
   nav { justify-content: center; gap: 1rem; }
   .portada { padding: 2.5rem 1rem 4rem; }
   .porque { padding: 2rem 1rem; }
+}
+.logo-caja {
+  flex-shrink: 0;
+}
+.logo-caja img {
+  display: block;
+  height: 60px;
+  width: auto;
 }

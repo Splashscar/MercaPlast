@@ -1,6 +1,38 @@
-<h1>Panel de administración</h1>
-<button (click)="auth.logout()">Cerrar sesión</button>
+<header class="barra">
+  <div class="logo-caja">
+    <img src="logo.jpg" alt="Mercaplast" />
+  </div>
 
-<app-admin-categorias />
-<app-admin-productos />
-<app-admin-promociones />
+  <h1>Panel de administración</h1>
+
+  <div class="acciones">
+    <a href="/" target="_blank">Ver catálogo</a>
+    <button class="salir" (click)="auth.logout()">Cerrar sesión</button>
+  </div>
+</header>
+
+<nav class="pestanas">
+  <button [class.activa]="seccion() === 'productos'" (click)="seccion.set('productos')">
+    Productos
+  </button>
+  <button [class.activa]="seccion() === 'categorias'" (click)="seccion.set('categorias')">
+    Categorías
+  </button>
+  <button [class.activa]="seccion() === 'promociones'" (click)="seccion.set('promociones')">
+    Promociones
+  </button>
+</nav>
+
+<main class="panel-contenido">
+  @switch (seccion()) {
+    @case ('productos') {
+      <app-admin-productos />
+    }
+    @case ('categorias') {
+      <app-admin-categorias />
+    }
+    @case ('promociones') {
+      <app-admin-promociones />
+    }
+  }
+</main>
